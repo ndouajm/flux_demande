@@ -1,0 +1,294 @@
+.data_home_content{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+    position: relative;
+    background-image: url(../../img/image.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover !important;
+    text-align: center;
+    justify-content: center;
+    animation: change 15s infinite ease-in-out;
+    -webkit-animation: change 15s infinite ease-in-out;
+}
+
+.content{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+
+}
+.content h1{
+    color: rgb(255, 81, 0);
+    font-size: 80px;
+    letter-spacing: 15px;
+    text-transform: uppercase;
+}
+.content h2{
+    color: rgb(0, 255, 17);
+    font-size: 50px;
+    text-transform: capitalize;
+}
+
+
+
+@keyframes change{
+    0%
+    {
+
+        background-image: url(../../img/image.jpg);
+        background-size: cover !important;
+    }
+    20%
+    {
+        background-image: url(../../img/img1.jpg);
+        background-size: cover !important;
+    }
+    40%
+    {
+        background-image: url(../../img/img2.jpg);
+        background-size: cover !important;
+    }
+    60%
+    {
+        background-image: url(../../img/img4.jpg);
+        background-size: cover !important;
+    }
+    80%
+    {
+        background-image: url(../../img/img1.jpg);
+        background-size: cover !important;
+    }
+    100%
+    {
+        background-image: url(../../img/img2.jpg);
+        background-size: cover !important;
+    }
+}
+
+.title-class {
+    border-bottom: 2px solid rgb(255, 85, 0);
+    border-radius: 10%;
+    -webkit-border-radius: 10%;
+    -moz-border-radius: 10%;
+    -ms-border-radius: 10%;
+    -o-border-radius: 10%;
+}
+// .controle_header{
+//     z-index: 10 !important;
+//     border: 2px solid rgb(255, 85, 0);
+// }
+
+// fiche signaletique ****************************
+
+.header_fiche h1{
+    border: 2px solid #1d1b1b;
+    width: 500px;
+    font-size: 25px;
+    text-decoration: underline;
+    padding: 4px;
+    box-shadow: 2px 2px 2px #ccc;
+
+
+}
+.content_form_data{
+    position: relative;
+}
+
+.img_content img{
+    min-height: 200px !important;
+    min-width: 200px !important;
+}
+
+.o_field_widget.o_field_radio.o_vertical {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.nb_text > li{
+    color: #000;
+    font-weight: bolder;
+}
+
+
+
+// report fiche signaletique style
+
+
+.table> :not(caption)>*>* {
+    padding: 0.5px;
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+}
+
+.content_fiche_img > img {
+    border-radius: 15px;
+    min-width: 210px;
+    max-width: 210px;
+    max-height: 200px;
+    min-height: 200px;
+    box-shadow: 4px 4px 4px #ccc;
+}
+
+.etat_label {
+    text-decoration: underline;
+    font-weight: bolder;
+    margin-left: 25px;
+}
+
+.admin_content {
+    border: 1px solid #ccc;
+}
+
+.main-container{
+    max-width: 850px !important;
+    min-height: 65vh;
+    border: 2px solid blue;
+}
+.header{
+    border: 1px solid #000;
+    margin-top: 10px;
+    background-color: rgba(204, 204, 204, 0.688);
+    font-size: 20px;
+    box-shadow: 2px 2px 2px solid #000;
+}
+
+.main_content{
+    margin-bottom: 80px;
+}
+
+.body_content .content{
+    max-width: 750px !important;
+}
+
+.souligne{
+    text-decoration: underline;
+}
+
+// hover field
+
+.input_fields{ 
+    display: inline-block;
+    margin: 0;
+}
+
+.input_fields::after,
+.o_input::after {
+  display:block;
+  content: '';
+  border-bottom: solid 3px rgb(255, 85, 0);
+  transform: scaleX(0);
+  transition: transform 250ms ease-in-out !important;
+}
+
+.input_fields:hover:after{
+    transform: scaleX(1) !important; 
+}
+
+.o_input:hover:after {
+    transform: scaleX(1) !important;
+}
+
+
+.content_img{
+    max-width: 160px !important;
+    min-width: 160px !important;
+    min-height: 150px;
+    max-height: 150px;
+    height: 150px !important;
+    text-align: center;
+    align-items: center;
+    // display: flex;
+    justify-content: center;
+    border: 2px solid #ccc;
+}
+
+// .container_etat_civil strong,
+// .container_info_admin strong,
+// .end_block strong{
+//     font-size: 17px !important;
+// }
+
+.demo{
+    background-color: red !important;
+    text-transform: uppercase;
+}
+
+
+/* style for espace rh */
+
+.shadow{
+    box-shadow: 4px 4px 4px rgb(18, 18, 18);
+    height: 200px;
+}
+.shadow:hover{
+    box-shadow: 10px 10px 10px rgb(0, 0, 0);
+}
+
+.shadow::after {
+    display:block;
+    content: '';
+    border-bottom: solid 3px #04ff47;
+    transform: scaleX(0);
+    transition: transform 250ms ease-in-out;
+}
+  
+.shadow:hover:after
+   { transform: scaleX(1); }
+
+
+.first-color{
+    border-bottom: 2px solid #ffb700;
+    border-radius: 50%;
+}
+.second-color{
+    border-bottom: 2px solid #fff;
+    border-radius: 50%;
+}
+.tree-color{
+    border-bottom: 2px solid #00ff1a;
+    border-radius: 50%;
+}
+
+.logo-content > .img{
+    min-height: 150px;
+    width: 150px;
+    background-image: url(../../description/amoirie.png);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.content_data{
+    display: flex;
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 100px;
+    box-shadow: 1px 1px 1px #ccc;
+    border-radius: 10px;
+    background-color: #ccc;
+    transition: transform 0.5 ease-in-out;
+    justify-content: center;
+}
+
+.content_data:hover{
+    background-color: #ffb700;
+    color: #fff;
+    box-shadow: 2px 2px 2px 2px #ccc;
+    font-size: 18px;
+    transition: transform 0.5 ease-in-out;
+}
+
+.content_btn{
+    max-height: 150px !important;
+    width: 100%;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+

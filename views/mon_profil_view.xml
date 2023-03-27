@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <data>
+
+        <record id="mon_profil_view_form" model="ir.ui.view">
+            <field name="name">mon.profil.view.form</field>
+            <field name="model">mon.profil</field>
+            <field name="arch" type="html">
+                <form string="">
+                    <header>
+                        <button name="action_publier" type="object" states="draft" string="Soumettre" groups="flux_demande.group_flux_demande_user" class="btn-success"/>
+
+                        <button name="action_accept_fich" type="object" states="publier" string="Accepter" groups="flux_demande.group_flux_demande_validate" class="btn-success"/>
+
+                        <button name="action_annuler" type="object" states="publier" string="Annuler" groups="base.group_user" class="btn-danger"/>
+                        <button name="generate_hr_qr" type="object" states="publier" string="generer qr code" groups="base.group_user" class="btn-outline-secondary"/>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="content_form_data mb-4">
+                            <div class="header_fiche text-center d-flex justify-content-center"><h1>Fiche Signaletique</h1></div>
+                        
+                            <group string="ETAT CIVIL">
+                                <div class="content-first row">
+                                    <div class="col-md-6">
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="prenom" class="my-2 "/>
+                                            <field name="sexe_id" widget='radio'/>
+                                            <field name="date_naissance" widget="date"/>
+                                            <field name="lieu_naissance" class="my-2"/>
+                                            <field name="nationalite_id" class="my-2" widget='flags'/>
+                                        </group>
+                                        <div class="content_y">
+
+                                            <div class="mb-2">
+                                                <div class="mb-3"><strong>Nature et N* de l'acte:</strong></div>
+                                                <div class="row d-flex justify-content-between w-100">
+                                                    <div class="col-6">
+                                                        <span>Nature: </span><field name="nature_act_identite"/>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <span>N* :</span><field name="numero_act_identite"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="">
+                                                <div class="mb-3"><strong>Date et Lieu de delivrance de l'acte:</strong></div>
+                                                <div class="row d-flex justify-content-between w-100">
+                                                    <div class="col-6">
+                                                        <span>Date: </span><field name="date_deliv_act"/>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <span>Lieu :</span><field name="lieu_deliv_act"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 d-flex" style="flex-direction: column;">
+
+                                        <div>
+                                            <field name="image_pro" widget='image' class="oe_avatar img_content"/>
+                                        </div>
+
+                                        <div>
+                                            <div class="w-100">
+                                            <div class="text-uppercase"><strong>Père</strong></div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <span>Nom: </span><field name="nom_pere"/>
+                                                </div>
+                                                <div class="col-6">
+                                                    <span>Prénom :</span><field name="prenom_pere"/>
+                                                </div>
+                                            </div>
+                                            </div>
+                                            <div class="w-100">
+                                            <div class="text-uppercase"><strong>Mère</strong></div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <span>Nom: </span><field name="nom_mere"/>
+                                                </div>
+                                                <div class="col-6">
+                                                    <span>Prénom :</span><field name="prenom_mere"/>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </group>
+
+
+                            <group name="name" string="RENSEIGNEMENTS ADMINISTRATIFS">
+                                <group>
+                                   <field name="matricule" placeholder="A1B225"/>
+                                   <field name="emploie"/>
+                                   <field name="nature_act_n"/>
+                                   <field name="situation_mili" widget='radio' string="Situation Militaire"/>
+                                   <field name="adresse_postal"/>
+                                </group>
+                                <group>
+                                   <field name="grade"/>
+                                   <field name="date_nomination" widget="date"/>
+                                   <field name="numero_act_n"/>
+                                   <field name="date_service" widget="date"/>
+                                </group>
+
+                                <div class="row d-flex justify-content-evenly w-75">
+                                    <div class="col-2"><strong>E-mail:</strong></div>
+                                    <div class="col-4">
+                                        <span>Professionnel</span><field name="email_pro" widget="email"/>
+                                    </div>
+                                    <div class="col-4">
+                                        <span>Personnel</span><field name="email_perso" widget="email" placeholder="exemple@exemple.com"/>
+                                    </div> 
+                                </div>
+                                <div class="row d-flex justify-content-between w-100">
+                                    <div class="col-3"><strong>Télephones:</strong></div>
+                                    <div class="col-3">
+                                        <span>Bur</span><field name="telephone_bur" widget="phone"/>
+                                    </div>
+                                    <div class="col-3">
+                                        <span>Dom</span><field name="telephone_dom" widget="phone"/>
+                                    </div>
+                                    <div class="col-3">
+                                        <span>Cell</span><field name="telephone_cell" widget="phone"/>
+                                    </div>
+                                    
+                                </div>
+
+                            </group>
+
+                            <div class="container data_info mt-4 px-4">
+                                <group >
+                                    <field name="ministere_structure"/>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="direction"/>
+                                        <field name="service"/>
+                                        <field name="fonction"/>
+                                        <field name="localite"/>
+                                    </group>
+                                    <group>
+                                        <field name="direction_date"/>
+                                        <field name="service_date"/>
+                                        <field name="fonction_date"/>
+                                        <field name="localite_date"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="specialite"/>
+                                    <field name="ministere_structure_origin"/>
+                                </group>
+                            </div>
+
+                            <div class="container">
+                                <group string="PERSONNES A CONTACTER EN CAS DE BESOIN">
+                                    <group>
+                                        <field name="first_last_name_one" string="Nom et Prenom"/>
+                                        <field name="first_last_name_two" string="Nom et Prenom"/>
+                                    </group>
+                                    <group>
+                                        <field name="name_one_phone" string="Cel" widget="phone" default="+225"/>
+                                        <field name="name_two_phone" string="Cel" widget="phone" default="+225"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="date_actu" string="DATE"/>
+                                </group>
+                            </div>
+
+                            <div class="container my-4 ms-3 d-flex justify-content-evenly">
+                                <div>
+                                    <div>
+                                        <strong>NB:</strong>
+                                    </div>
+                                    <div class="nb_text">
+                                        <ul>
+                                            <li class="mb-3">Diplome à partir de DEUG, veuillez préciser les spécialités (ex: licence de droit public ...)</li>
+                                            <li>Ne pas oublier de donner le numéro de téléphone ou l'on peut vous joindre</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <notebook>
+                            <page string="EXPERIENCES PROFESSIONNELLES">
+                                <field name="experience_line_ids">
+                                    <form>
+                                        <group>
+                                            <field name="date" string="Date"/>
+                                            <field name="emploie" string="Emploi"/>
+                                            <field name="structure" string="Structure"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+
+                            <page string="FONCTIONS ANTERIEURES">
+                                <field name="fonction_ant_line_ids">
+                                    <form>
+                                        <group>
+                                            <field name="f_date_start" string="Date Début"/>
+                                            <field name="f_date_end" string="Date de Fin"/>
+                                            <field name="designation_post" string="Designation du Poste"/>
+                                            <field name="structure" string="Structure"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Etude, Formations Professionnelles, Diplome">
+                                <field name="etude_formation_line_ids">
+                                    <form>
+                                        <group>
+                                            <field name="diplome" string="Diplome"/>
+                                            <field name="year_obtention" string="Date d'obtention"/>
+                                            <field name="etabli_frequent" string="Etablissement Frequenté"/>
+                                            <field name="ville_pays" string="Ville et Pays"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="ENFANTS">
+                                <field name="enfants_line_ids">
+                                    <form>
+                                        <group>
+                                            <field name="nom_prenom" string="Nom Et Prenom"/>
+                                            <field name="birthday" string="Date de Naissance"/>
+                                            <field name="lieu_naissance" string="Lieux de Naissance"/>
+                                            <field name="sexe_enfants" string="Sexe" widget="radio"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="FICHIER JOIN">
+                                <group string="">
+                                    <field name="fichier" string="Charger votre fichier"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="mon_profil_view_tree" model="ir.ui.view">
+            <field name="name">mon.profil.view.tree</field>
+            <field name="model">mon.profil</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="name" string="Responsable"/>
+                    <field name="matricule" string="Matricule"/>
+                    <field name="create_date" string="Date de création"/>
+                    <field name="state" string="Status"/>
+                </tree>
+            </field>
+       </record>
+    
+       <record id="mon_profil_action" model="ir.actions.act_window">
+            <field name="name">Ma Fiche Signaletique</field>
+            <field name="res_model">mon.profil</field>
+            <field name="view_mode">form</field>
+       </record>
+
+
+        <!-- experience Pro session -->
+       <record id="experience_pro_view_form" model="ir.ui.view">
+        <field name="name">experience.pro.view.form</field>
+        <field name="model">experience.pro</field>
+        <field name="arch" type="xml">
+            <form string="">
+                
+                <sheet>
+                    <group>
+                        <field name="date"/>
+                        <field name="emploie"/>
+                        <field name="structure"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+       </record>
+
+       <record id="experience_pro_view_tree" model="ir.ui.view">
+            <field name="name">experience.pro.view.tree</field>
+            <field name="model">experience.pro</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="date"/>
+                    <field name="emploie"/>
+                    <field name="structure"/>
+                </tree>
+            </field>
+       </record>
+
+       <record id="experience_pro_action" model="ir.actions.act_window">
+            <field name="name">Mes Experiences Pro</field>
+            <field name="res_model">experience.pro</field>
+            <field name="view_mode">tree,form</field>
+       </record>
+       <!-- End experience Pro session -->
+
+        <!-- fonction anterieure session -->
+       <record id="fonction_anterieure_view_form" model="ir.ui.view">
+        <field name="name">fonction.anterieure.view.form</field>
+        <field name="model">fonction.anterieure</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="f_date_start" string="Date de Debut"/>
+                        <field name="f_date_end" string="Date de Fin"/>
+                        <field name="designation_post" string="Designation du Poste"/>
+                        <field name="structure" string="Structure"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+       </record>
+
+       <record id="fonction_anterieure_view_tree" model="ir.ui.view">
+            <field name="name">fonction.anterieure.view.tree</field>
+            <field name="model">fonction.anterieure</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="f_date_start" string="Date de Debut"/>
+                    <field name="f_date_end" string="Date de Fin"/>
+                    <field name="designation_post" string="Designation du Poste"/>
+                    <field name="structure" string="Structure"/>
+                </tree>
+            </field>
+       </record>
+
+       <record id="fonction_anterieure_action" model="ir.actions.act_window">
+            <field name="name">Mes Fonctions anterieures</field>
+            <field name="res_model">fonction.anterieure</field>
+            <field name="view_mode">tree,form</field>
+       </record>
+       <!-- End fonction anterieure session -->
+
+        <!-- etude Formation session -->
+       <record id="etude_formation_view_form" model="ir.ui.view">
+        <field name="name">etude.formation.view.form</field>
+        <field name="model">etude.formation</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="diplome" string="Diplome"/>
+                        <field name="year_obtention" string="Date d'obtention"/>
+                        <field name="etabli_frequent" string="Etablissement Frequenté"/>
+                        <field name="ville_pays" string="Ville et Pays"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+       </record>
+
+       <record id="etude_formation_view_tree" model="ir.ui.view">
+            <field name="name">etude.formation.view.tree</field>
+            <field name="model">etude.formation</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="diplome" string="Diplomes"/>
+                    <field name="year_obtention" string="Date d'obtention"/>
+                    <field name="etabli_frequent" string="Etablissement Frequenté"/>
+                    <field name="ville_pays" string="Ville et Pays"/>
+                </tree>
+            </field>
+       </record>
+
+       <record id="etude_formation_action" model="ir.actions.act_window">
+            <field name="name">Mes Fonctions anterieures</field>
+            <field name="res_model">etude.formation</field>
+            <field name="view_mode">tree,form</field>
+       </record>
+       <!-- End etude formation session -->
+
+        <!-- Enfants session -->
+       <record id="enfants_view_form" model="ir.ui.view">
+        <field name="name">nbr.enfants.view.form</field>
+        <field name="model">nbr.enfants</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="nom_prenom" string="Nom et Prenom"/>
+                        <field name="birthday" string="Date de Naissance"/>
+                        <field name="lieu_naissance" string="Lieux de Naissance"/>
+                        <field name="sexe_enfants" string="Sexe"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+       </record>
+
+       <record id="enfants_view_tree" model="ir.ui.view">
+            <field name="name">nbr.enfants.view.tree</field>
+            <field name="model">nbr.enfants</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="nom_prenom" string="Nom et Prenom"/>
+                    <field name="birthday" string="Date de Naissance"/>
+                    <field name="lieu_naissance" string="Lieux de Naissance"/>
+                    <field name="sexe_enfants" string="Sexe"/>
+                </tree>
+            </field>
+       </record>
+
+       <record id="enfants_action" model="ir.actions.act_window">
+            <field name="name">Mes Enfants</field>
+            <field name="res_model">nbr.enfants</field>
+            <field name="view_mode">tree,form</field>
+       </record>
+       <!-- End Enfants session -->
+
+       <!-- emploie many2one -->
+       <record id="emploi_view_form" model="ir.ui.view">
+        <field name="name">flux.emploi.view.form</field>
+        <field name="model">flux.emploi</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="name" string="Nom"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+       </record>
+       <record id="emploi_action" model="ir.actions.act_window">
+            <field name="name">Mon emploi</field>
+            <field name="res_model">flux.emploi</field>
+            <field name="view_mode">tree,form</field>
+       </record>
+
+       <record model="ir.actions.server" id="action_show_mon_profil"> <!-- Ma fiche signaletique-->
+            <field name="name">Voir Ma Fiche</field>
+            <field name="model_id" ref="flux_demande.model_mon_profil"/>
+            <field name="state">code</field>
+            <field name="code">action = model.show_mon_profil()</field>
+        </record>
+
+       
+
+    </data>
+    
+
+</odoo>

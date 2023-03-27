@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+    
+        <record id="attestation_travail_view_form" model="ir.ui.view">
+            <field name="name">attestation.travail.view.form</field>
+            <field name="model">attestation.travail</field>
+            <field name="arch" type="html">
+                <form string="">
+                    <header>
+                        <button name="action_confim" type="object" states="draft" string="Soumettre" groups="flux_demande.group_flux_demande_user" class="btn-success"/>
+
+                        <button name="action_approval_drh" type="object" states="drh_approval" string="Valider" groups="flux_demande.group_flux_demande_validate" class="btn-success"/>
+
+                        <button name="action_annuler" type="object" states="drh_approval" string="Annuler" groups="base.group_user" class="btn-danger"/>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        
+                        <div class="oe_title pt-4">
+                            <div class="oe_title">
+                                <h1 class="title-class">
+                                    <field name="name" placeholder="Attestation De Travail"/>
+                                </h1>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="employee_id"/>
+                                <field name="post_occuper" string="Poste occuper"/>
+                            </group>
+                            <group>
+                                <field name="request_date"/>
+                                <field name="date_prise_service" string="Date De prise de service"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Note" string="Note">
+                                <field name="note" string="Note"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- flux de demande tree views -->
+
+            <record id="attestation_travail_views_tree" model="ir.ui.view">
+                <field name="name">Liste des Attestation De Travail</field>
+                <field name="model">attestation.travail</field>
+                <field name="arch" type="xml">
+                    <tree string="">
+                        <field name="employee_id"/>
+                        <field name="request_date"/>
+                        <field name="date_start" string="Date De Debut"/>
+                        <field name="state" string="Etat" widget="badge"
+                        decoration-warning="state == 'drh_approval'" decoration-success="state == 'done'"/>
+                    </tree>
+                </field>
+            </record>
+
+        <!-- End demande de conge tree views -->
+
+        <record id="attestation_travail_view_search" model="ir.ui.view">
+            <field name="name">attestation.travail.view.search</field>
+            <field name="model">attestation.travail</field>
+            <field name="arch" type="xml">
+                <search string="">
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="request_date"/>
+                    <field name="state"/>
+                    <field name="date_start"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Demandeur" name="employee_id" context="{'group_by':'employee_id'}"/>
+                        <filter string="Date de Demande" name="request_date" context="{'group_by':'request_date'}"/>
+                        <filter string="Date de D'Echeance" name="date_end" context="{'group_by':'date_end'}"/>
+                        <filter string="State" name="state" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+ 
+
+        <record id="attestation_travail_action" model="ir.actions.act_window">
+            <field name="name">Attestation De Travail</field>
+            <field name="res_model">attestation.travail</field>
+            <field name="view_mode">form</field>
+        </record>
+
+        <record model="ir.actions.server" id="action_show_attestation_travail">
+            <field name="name">Attestation de Travail </field>
+            <field name="model_id" ref="flux_demande.model_attestation_travail"/>
+            <field name="state">code</field>
+            <field name="code">action = model.show_attestation_travail()</field>
+        </record>
+
+    </data>
+    
+
+</odoo>

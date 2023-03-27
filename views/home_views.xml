@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="home_view_form" model="ir.ui.view">
+            <field name="name">home.view.form</field>
+            <field name="model">home.demande</field>
+            <field name="arch" type="html">
+                <form string="" class="data_home_content">
+                    <div class="content">
+                       <h1>Bienvenue</h1>
+                       <h2>Sur la plateforme de gestion de Demande Du Micen</h2>
+                    </div>
+                </form>
+            </field>
+        </record>
+    
+        
+        <record id="home_menu_action" model="ir.actions.act_window">
+            <field name="name">home.views.action</field>
+            <field name="res_model">home.demande</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        
+
+    </data>
+    
+
+</odoo>

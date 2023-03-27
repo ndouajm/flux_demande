@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <data>
+
+        <menuitem
+            id="first_module_menu_action"
+            name="MICEN_RH"
+            action="hr.action_show_ma_fiche"
+            groups="flux_demande.group_flux_demande_user"
+            sequence="1"
+            web_icon="flux_demande,static/description/icon.png"/>
+
+        <menuitem
+            id="mon_profil_action_menu"
+            name="Espace Admin"
+            groups="group_flux_demande_admin"
+            parent="first_module_menu_action"
+            sequence="30"/>
+
+            <menuitem
+                id="menu_hr_employee_user"
+                name="Toutes les Fiches"
+                action="hr.open_view_employee_list_my"
+                parent="mon_profil_action_menu"
+                sequence="1"/>
+
+            <menuitem
+                id="gestion_action_menu"
+                name="Gestion des Demandes"
+                action="espace_rh_action"
+                parent="mon_profil_action_menu"
+                sequence="80"/>
+
+            <menuitem
+                id="demande_hr_employee_user"
+                name="Agents"
+                action="action_redirect_to_hr_agent"
+                parent="mon_profil_action_menu"
+                sequence="10"/>
+
+        <menuitem
+                id="config_type_doc_menu"
+                name="Configuration"
+                parent="first_module_menu_action"
+                groups="group_flux_demande_admin"
+                sequence="10"/>
+
+            <menuitem
+                id="motif_demande_action_menu"
+                name="Motif De La Demande"
+                action="motif_demande_action"
+                parent="config_type_doc_menu"
+                sequence="2"/>
+
+            <menuitem
+                id="grade_agent_action_menu"
+                name="Grade"
+                action="grade_fonctionnaire_action"
+                parent="config_type_doc_menu"
+                sequence="2"/>
+
+            <menuitem
+                id="config_alert_action_menu"
+                name="Configuré Agent Rh"
+                action="config_alert_action"
+                parent="config_type_doc_menu"
+                sequence="5"/>
+
+        <menuitem
+            id="demande_first_menu"
+            name="e_Demande"
+            parent="first_module_menu_action"
+            sequence="3"/>
+
+
+        <menuitem id="cert_prise_service_menu" name="Certificat De Prise De Service" action="action_show_certificat_prise_service" parent="demande_first_menu" sequence="2"/>
+
+        <menuitem id="cert_reprise_service_menu" name="Certificat De Reprise De Service" action="action_show_certificat_reprise_service" parent="demande_first_menu" sequence="3"/>
+
+        <menuitem id="cessat_def_service_menu" name="Cessation Definitive De Service" action="action_show_cessation_service" parent="demande_first_menu" sequence="5"/>
+        
+        <menuitem id="attest_presence_menu" name="Attestation De Presence" action="action_show_attestation_presence" parent="demande_first_menu" sequence="6"/>
+        
+        <menuitem id="cert_travail_menu" name="Certificat De Travail" action="action_show_certificat_travail" parent="demande_first_menu" sequence="4"/>
+
+        <menuitem id="attest_travail_menu" name="Attestation De Travail" action="attestation_travail_action" parent="demande_first_menu" sequence="7"/>
+        
+        <menuitem id="note_affectation_menu" name="Note D'Affectation" action="note_affectation_action" parent="demande_first_menu" sequence="8"/>
+
+        
+        <!-- <menuitem id="menu_redirect_to_hr_holidays" name="Demande De Congé" parent="demande_first_menu" action="action_redirect_to_hr_holidays" sequence="9"/> -->
+
+            <!-- <menuitem
+                id="ma_fiche_signaletique"
+                name="Ma Fiche Signaletique"
+                parent="first_module_menu_action"
+                action="action_show_mon_profil"
+                sequence="1"/> -->
+
+            <menuitem
+                id="ma_fiche_signaletique"
+                name="Ma Fiche Signaletique"
+                action="hr.action_show_ma_fiche"
+                parent="first_module_menu_action"
+                sequence="1"/>
+
+            <menuitem
+                id="menu_new_request"
+                name="e_Congé"
+                parent="first_module_menu_action"
+                sequence="2"/>
+
+                <menuitem
+                    id="hr_leave_menu_new_request"
+                    name="Tableau de Bord"
+                    parent="menu_new_request"
+                    action="hr_holidays.hr_leave_action_new_request"
+                    sequence="1"/>
+
+                <menuitem
+                    id="hr_leave_menu_my"
+                    name="Mes demandes de Congé"
+                    parent="menu_new_request"
+                    action="hr_holidays.hr_leave_action_my"
+                    sequence="2"/>
+
+                <menuitem
+                    id="menu_open_allocation"
+                    name="Mes Demande d'allocation"
+                    parent="menu_new_request"
+                    action="hr_holidays.hr_leave_allocation_action_my"
+                    sequence="3"/>
+
+            
+    </data>
+    
+
+</odoo>

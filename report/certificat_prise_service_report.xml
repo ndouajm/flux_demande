@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="report_certificat_prise_service" model="ir.actions.report">
+        <field name="name">Certificat De Prise De service</field>
+        <field name="model">certificat.prise.service</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">flux_demande.certificat_prise_service</field>
+        <field name="report_file">flux_demande.certificat_prise_service</field>
+        <field name="binding_model_id" ref="model_certificat_prise_service"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+    <template id="certificat_prise_service">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc"><span t-field="doc.employee_id" />
+                <t t-call="web.internal_layout">
+                    <div class="page container main-container">
+
+                        <style>
+
+                            .main_container{
+                                max-width: 1000px !important;
+                                <!-- min-height: 65vh; -->
+                            }
+
+                            .content_header{
+                                display: flex;
+                                justify-content: center;
+                                margin-top: 50px !important;
+                                margin-bottom: 50px !important;
+                            }
+
+                            .header_attes{
+                                border: 1px solid #000;
+                                margin-top: 10px;
+                                background-color: rgba(204, 204, 204, 0.688);
+                                font-size: 30px;
+                                box-shadow: 2px 2px 2px solid #000;
+                                margin-left: 50px;
+                                width: 750px;
+                            }
+                            strong{
+                                margin-left: 10px;
+                            }
+                            
+                            .souligne{
+                                text-decoration: underline;
+                            }
+
+                        </style>
+                        
+
+                        <div class="container main_container relative">
+
+                            <div class="container mb-3 row" style="font-size: 22px; margin-top: 15px;">
+                                <div class=""><span>N*:</span> 000 <span></span> </div>
+                                <div class="" style="min-width: 320px; margin-left: 200px;">/MICEN/DRH</div>
+                                <div class="d-flex justify-content-end"><strong>Abidjan, le <span t-field="doc.request_date"/></strong></div>
+                            </div>
+                            <div class="content_header d-flex justify-content-center">
+                                <h1 class="header_attes text-uppercase text-center py-2 px-4">CERTIFICAT DE PRISE DE SERVICE</h1>
+                            </div>
+
+                            <div class="body_content_attes d-flex justify-content-center" style="font-size: 25px; margin-bottom: 35px;">
+                                <div class="content">
+                                    <p>
+                                        <span class="text-muted">Le Directeur Des Ressources Humaines du Ministère de la Communication et l'Economie Numerique,soussigné, certifie que, Monsieur</span> 
+                                        <strong><span t-field="doc.employee_id" class="text-uppercase"/></strong>, 
+                                        <strong><span t-field="doc.post_occuper" class="text-uppercase"/></strong>, 
+                                        <span class="text-muted">a pris service le</span> 
+                                        <strong><span t-field="doc.date_start" class="text-uppercase"/></strong>
+                                        <span class="text-muted">à la </span>
+                                        <strong  style="margin-left: 0 !important;"><span t-field="doc.direction" class="text-uppercase"/></strong>,
+                                        <span class="text-muted">en qualité de</span> 
+                                        <strong><span t-field="doc.fonction" class="text-uppercase"/></strong>.
+                                    </p>
+                                    <p class="text-muted">
+                                        En Foi de quoi, le présent certificat lui est délivré pour servir et valoir ce que le droit.
+                                    </p>
+                                </div>
+                            </div>
+                           <div class="d-flex justify-content-end mt-4">
+                                <strong>
+                                    <p class="souligne mt-4" style="font-size: 25px;">
+                                        Alain KOMENAN
+                                    </p>
+                                    <p class="text-muted" style="font-size: 22px;">Secrétaire Général de Préfecture</p>
+                                </strong>
+                            </div>
+                            <div class="signature mt-4" >
+                                <p style="font-size: 25px;"><strong class="souligne" >Ampliations:</strong></p>
+                                <ul>
+                                    <li>Cabinet ........................... <span>01</span></li>
+                                    <li>Intéressé(e) ...................... <span>01</span></li>
+                                    <li>Chrono ............................ <span>01</span></li>
+                                </ul>
+                            </div>
+                            <div class="code d-flex justify-content-end">
+                                <img t-att-src="'data:image/png;base64,%s' % to_text(doc.qr_code)" style="max-width: 200px; max-height: 200px"/>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

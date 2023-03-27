@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+   <record id="report_flux_demande" model="ir.actions.report">
+      <field name="name">Flux De Demande</field>
+      <field name="model">flux.demande</field>
+      <field name="report_type">qweb-pdf</field>
+      <field name="report_name">flux_demande.flux_demande</field>
+      <field name="report_file">flux_demande.flux_demande</field>
+      <field name="binding_model_id" ref="model_flux_demande"/>
+      <field name="binding_type">report</field>
+   </record>
+
+
+   <template id="flux_demande">
+      <t t-call="web.html_container">
+         <t t-foreach="docs" t-as="doc">
+            <t t-call="web.internal_layout">
+               <div class="page">
+                  <div class="text-center">
+                     <h2>
+                        <strong>
+                           <p>Flux De Demande <span t-field="doc.name"/>
+                              <span t-field="doc.state"/>
+                           </p>
+                        </strong>
+                        <br/>
+                     </h2>
+                  </div>
+                  <table class="table table-responsive">
+                     <tr style="border: 2px solid black;">
+                        <td>
+                           <strong>Demandeur</strong>
+                        </td>
+                        <td>
+                           <span t-field="doc.employee_id"/>
+                        </td>
+                        <td>
+                           <strong>Date De La Demande</strong>
+                        </td>
+                        <td>
+                           <span t-field="doc.request_date"/>
+                        </td>
+                     </tr>
+                    
+                  </table>
+
+                  <table>
+                     <tr>
+                        <td><strong>Note</strong></td> <td> <span t-field="doc.motif_id"/></td>
+                     </tr>
+                     <tr>
+                        <td><strong>Date de Fin</strong></td> <td> <span t-field="doc.date_end"/></td>
+                     </tr>
+                  </table>
+
+
+
+               <div class="row mt32 mb32">
+                  <div class="col-6">
+                     <strong>Demandeur Signature:____________________</strong>
+                  </div>
+                  <div class="col-6">
+                     <strong>Date:____________________</strong>
+                  </div>
+               </div>
+               <div class="row mt32 mb32">
+                  <div class="col-6">
+                     <strong>Department Manager Signature:____________________</strong>
+                  </div>
+                  <div class="col-6">
+                     <strong>Date:____________________</strong>
+                  </div>
+               </div>
+               <div class="row mt32 mb32">
+                  <div class="col-6">
+                     <strong>Approver Signature:____________________</strong>
+                  </div>
+                  <div class="col-6">
+                     <strong>Date:____________________</strong>
+                  </div>
+               </div>
+            </div>
+         </t>
+      </t>
+   </t>
+</template>
+</odoo>

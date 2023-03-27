@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="report_mon_profil" model="ir.actions.report">
+            <field name="name">Fiche Signaletique</field>
+            <field name="model">mon.profil</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">flux_demande.mon_profil</field>
+            <field name="report_file">flux_demande.mon_profil</field>
+            <field name="binding_model_id" ref="model_mon_profil"/>
+            <field name="binding_type">report</field>
+        </record>
+
+
+        <template id="mon_profil">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.internal_layout">
+                        <div class="page container main_container_report_fiche">
+                            <style>
+                                   
+                                    .content_img{
+                                        width:250px;
+                                        height:250px;
+                                        border-radius: 8px;
+                                        text-align: center;
+                                        align-items: center;
+                                        display: flex;
+                                        justify-content: end;
+                                        border: 2px solid #ccc;
+                                    }
+
+                                    .container_etat_civil strong,
+                                    .container_info_admin strong,
+                                    .end_block strong{
+                                        font-size: 25px !important;
+                                        margin-right: 10px !important;
+                                        margin-bottom: 20px;
+                                    }
+
+                                    .text-muted{
+                                        font-size: 20px !important;
+                                    }
+
+                                    .souligne{
+                                        text-decoration: underline;
+                                    }
+
+                                    strong{
+                                        font-size: 18px;
+                                    }
+
+                                    .header{
+                                        backgroud-color: #ccc;
+                                    }
+
+                                </style>
+                            
+                            <div class="container px-0" style="max-width: 1300px; position: relative; margin-bottom: 0 !important;">
+
+                               <div class="hearder_container">
+                                     <div class="d-flex justify-content-center text-center" style="
+                                        margin-bottom: 30px !important;
+                                        ">
+                                        <h1 class="header py-3 px-4 text-center bg-secondary border border-1 border-dark opacity-0 text-uppercase"  style="
+                                        margin-left: 400px;">fiche signaletique</h1>
+
+                                    </div>
+                                   
+                               </div>
+                            
+                                <div class="container_etat_civil" style="margin-bottom: 35px !important;">
+
+                                    
+                                    <p class="souligne text-uppercase ms-4">
+                                        <strong class="ms-4" style="font-size: 35px !important; margin-bottom: 5px;"> <em>etat civil</em> </strong>
+                                    </p>
+
+                                    <div class="border border-1 border-secondary row col-12 d-flex mx-0 ps-1">
+                                        <div class="col-9 etat_civil pe-0">
+                                            <div class="">
+                                                <strong>Nom :</strong> <span class="text-muted"><span t-field="doc.name" /></span>
+                                            </div>
+                                            <div class="">
+                                                <strong>Prenoms :</strong> <span class="text-muted"><span t-field="doc.prenom" /></span>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-8"><strong>Date de Naissance</strong> <span class="text-muted"><span t-field="doc.date_naissance" /></span></div>
+                                                <div class="col"><strong>Lieu de Naissance</strong><div class="text-muted"><span t-field="doc.lieu_naissance" /></div></div>
+                                            </div>
+                                            <div>
+                                                <strong>N* de l'act de naissance</strong> <span class="text-muted"><span t-field="doc.numero_act_identite" /></span>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-8"><strong>Date d'etablissement de l'acte d'identité</strong><span class="text-muted"><span t-field="doc.date_deliv_act" /></span></div>
+                                                <div class="col"><strong>à</strong><span class="text-muted"><span t-field="doc.lieu_deliv_act" /></span></div>
+                                            </div>
+                                            <div>
+                                                <strong>Nationnalité :</strong><span class="text-muted"><span t-field="doc.nationalite_id" /></span>
+                                            </div>
+                                            <div>
+                                                <strong>Sexe:</strong><span class="text-muted"><span t-field="doc.sexe_id" /></span>
+                                            </div>
+                                            <div>
+                                                <strong>Nom et Prénoms de la Père:</strong>
+                                                <span class="text-muted">
+                                                    <span t-field="doc.nom_pere" />
+                                                </span>
+                                                <span class="text-muted ms-1">
+                                                    <span t-field="doc.prenom_pere" />
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <strong>Nom et prénoms du Mère</strong>
+                                                <span class="text-muted">
+                                                    <span t-field="doc.nom_mere" />
+                                                </span>
+                                                <span class="text-muted">
+                                                    <span t-field="doc.prenom_mere" />
+                                                </span>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-8"><strong>Situation Matrimoniale:</strong><span class="text-muted"><span t-field="doc.situation_matrimo" /></span></div>
+                                                <div class="col"><strong>Nombre d'enfants:</strong><span class="text-muted"><span t-field="doc.nbr_enfants" /></span></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col px-0">
+                                            <div class="content_img d-flex justify-content-end">
+                                                <img t-att-src="'data:image/png;base64,%s' % to_text(doc.image_pro)" style="width:100%; height:100%;"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="container_info_admin" style="margin-bottom: 35px !important;">
+                                    <p class="souligne text-uppercase ms-4">
+                                        <strong class="ms-4 " style="font-size: 35px !important; margin-bottom: 5px;">Renseignements administratifs </strong>
+                                    </p>
+                                    <div class="border border-1 border-secondary row col-12 d-flex mx-0 ps-1" >
+                                        <div class="col-12 etat_civil">
+                                            <div class="row">
+                                                <div class="col-8"><strong>Matricule:</strong><span class="text-muted"><span t-field="doc.matricule" /></span></div>
+                                                <div class="col"><strong>Grade</strong><span class="text-muted"><span t-field="doc.grade" /></span></div>
+                                            </div>
+                                            <div class="">
+                                                <strong>Emploi :.</strong><span class="text-muted"><span t-field="doc.emploie" /></span>
+                                            </div>
+                                            <div class="">
+                                                <strong>Date de Nomination dans l'emploie</strong><span class="text-muted"><span t-field="doc.date_nomination" /></span>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-4"><strong>Nature de l'act de nomination</strong><span class="text-muted"><span t-field="doc.nature_act_n" /></span></div>
+                                                <div class="col-4"><strong>N*</strong><span class="text-muted"><span t-field="doc.numero_act_n" /></span></div>
+                                                <div class="col-4"><strong>Date de signature</strong>........</div>
+                                            </div>
+                                            <div>
+                                                <strong>Date de première prise de service dans l'administration :</strong><span class="text-muted"><span t-field="doc.date_service" /></span>
+                                            </div>
+                                            <div>
+                                                <strong>Situation Militaire:</strong><span class="text-muted"><span t-field="doc.situation_mili" /></span>
+                                            </div>
+                                            <div>
+                                                <strong>Adresse Postal:</strong><span class="text-muted"><span t-field="doc.adresse_postal" /></span>
+                                            </div>
+                                            <div><strong>Téléphones:</strong></div>
+                                            <div class="row">
+                                                <div class="col-4"><strong>Bur</strong><span class="text-muted"><span t-field="doc.telephone_bur" /></span></div>
+                                                <div class="col-4"><strong>Dom</strong><span class="text-muted"><span t-field="doc.telephone_dom" /></span></div>
+                                                <div class="col-4"><strong>Cell</strong><span class="text-muted"><span t-field="doc.telephone_cell" /></span></div>
+                                            </div>
+
+                                            <div>
+                                                <strong>Email:</strong><span class="text-muted"><span t-field="doc.email_pro" /></span>
+                                                <strong>Email:</strong><span class="text-muted"><span t-field="doc.email_perso" /></span>
+                                            </div>
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+
+                                <div class="containe px-5 text-uppercase end_block">
+                                    <div>
+                                        <strong>ministère ou structure:</strong><span class="text-muted"><span t-field="doc.ministere_structure" /></span>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-8"><strong>Direction:</strong><span class="text-muted"><span t-field="doc.direction" /></span></div>
+                                        <div class="col"><strong>Date d'effet:</strong><span class="text-muted"><span t-field="doc.direction_date" /></span></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-8"><strong>service:</strong><span class="text-muted"><span t-field="doc.service" /></span></div>
+                                        <div class="col"><strong>Date d'effet:</strong><span class="text-muted"><span t-field="doc.service_date" /></span></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-8"><strong>fonction:</strong><span class="text-muted"><span t-field="doc.fonction" /></span></div>
+                                        <div class="col"><strong>Date d'effet:</strong><span class="text-muted"><span t-field="doc.fonction_date" /></span></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4"><strong>localité:</strong><span class="text-muted"><span t-field="doc.localite" /></span></div>
+                                        <div class="col-4"><strong>Date d'effet:</strong><span t-field="doc.localite_date" /></div>
+                                        <div class="col-4"><strong>specialité:</strong><span t-field="doc.specialite" /></div>
+                                    </div>
+                                    <div>
+                                        <strong>ministère et structure d'origine</strong><span class="text-muted"><span t-field="doc.ministere_structure_origin" /></span>
+                                    </div>
+
+                                </div>
+                               
+                            </div>
+
+                             <div class="code d-flex justify-content-end">
+                                <img t-att-src="'data:image/png;base64,%s' % to_text(doc.qr_code)" style="max-width: 200px; max-height: 200px"/>
+                            </div>
+
+                        </div>
+
+                        <!-- <div class="page">
+
+                            <strong>
+                                <h3>Enfants</h3>
+                            </strong>
+                            <table class="table col-10  table-contet mx-auto">
+                                <tr style="border: 2px solid black;">
+                                    
+                                    <td>
+                                        <strong>Nom et Prenom</strong>
+                                    </td>
+                                    <td>
+                                        <strong>Date de Naissance</strong>
+                                    </td>
+                                    <td>
+                                        <strong>Sexe</strong>
+                                    </td>
+                                    <td>
+                                        <strong>Lieu de Naissance</strong>
+                                    </td>
+                                </tr>
+                                <t t-foreach="doc.enfants_line_ids" t-as="enfants_line_id">
+                                    <tr style="border: 2px solid grey;text-align: start;">
+                                        <td>                                            
+                                            <span t-field="enfants_line_id.nom_prenom" />
+                                        </td>
+                                        <td>                                           
+                                            <span t-field="enfants_line_id.birthday" />
+                                        </td>
+                                        <td >
+                                            <span t-field="enfants_line_id.sexe_enfants" />
+                                        </td>
+                                        <td >
+                                            <span t-field="enfants_line_id.lieu_naissance" />
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+                            
+                        </div> -->
+
+                        <style>
+                            .text{
+                                border: 2px solid red;
+                                backgroud-color: blue;
+                            }
+
+                            td strong{
+                                font-weight: bolder !important;
+                            }
+                        </style>
+
+                        <div class="page container" style="margin-top: 500px;">
+                            <strong>
+                                <h1 class="souligne text-uppercase">Experience professionnelle</h1>
+                            </strong>
+                            <strong class="souligne">
+                                <h2>Emplois Antérieurs</h2>
+                            </strong>
+                            <table class="table col-10  table-contet mx-auto">
+                                <tr style="border: 2px solid black;">
+                                    
+                                    <td>
+                                        <strong>Date</strong>
+                                    </td>
+                                    <td>
+                                        <strong>Emploi</strong>
+                                    </td>
+                                    <td>
+                                        <strong>Structure</strong>
+                                    </td>
+                                    
+                                </tr>
+                                <t t-foreach="docs.experience_line_ids" t-as="experience_line_id">
+                                    <tr style="border: 2px solid grey;text-align: start;">
+                                        <td class="text-muted">                                            
+                                            <span t-field="experience_line_id.date" />
+                                        </td>
+                                        <td class="text-muted">                                           
+                                            <span t-field="experience_line_id.emploie" />
+                                        </td>
+                                        <td  class="text-muted">
+                                            <span t-field="experience_line_id.structure" />
+                                        </td>
+                                       
+                                    </tr>
+                                </t>
+                            </table>
+                            
+                            <strong class="souligne mt-4">
+                                <h2 class="text-uppercase">fonction Antérieures</h2>
+                            </strong>
+
+                             <table class="table col-10  table-contet mx-auto">
+                                <tr style="border: 2px solid black;">
+                                    <td><strong>Du</strong></td>
+                                    <td><strong>Au</strong></td>
+                                    <td><strong>Désignation du Poste</strong></td>
+                                    <td><strong>Structure</strong></td>
+                                </tr>
+                                <t t-foreach="docs.fonction_ant_line_ids" t-as="fonction_ant_line_id">
+
+                                    <tr style="border: 2px solid grey;text-align: start;">
+                                        <td class="text-muted">                                            
+                                            <span t-field="fonction_ant_line_id.f_date_start" />
+                                        </td>
+                                        <td class="text-muted">                                           
+                                            <span t-field="fonction_ant_line_id.f_date_end" />
+                                        </td>
+                                        <td  class="text-muted">
+                                            <span t-field="fonction_ant_line_id.designation_post" />
+                                        </td>
+                                        <td  class="text-muted">
+                                            <span t-field="fonction_ant_line_id.structure" />
+                                        </td>
+                                       
+                                    </tr>
+                                    
+                                </t>
+                            </table>
+
+
+                            <strong class="souligne mt-4">
+                                <h2 class="text-uppercase">etude, formation proffessionnelles, titres et diplomes</h2>
+                            </strong>
+
+                             <table class="table col-10  table-contet mx-auto">
+                                <tr style="border: 2px solid black;">
+                                    <td><strong>Diplomes</strong></td>
+                                    <td><strong>Année d'obtention</strong></td>
+                                    <td><strong>Etablissement frequanté</strong></td>
+                                    <td><strong>Ville et Pays</strong></td>
+                                </tr>
+                                <t t-foreach="docs.etude_formation_line_ids" t-as="etude_formation_line_id">
+
+                                    <tr style="border: 2px solid grey;text-align: start;">
+                                        <td class="text-muted">                                            
+                                            <span t-field="etude_formation_line_id.diplome" />
+                                        </td>
+                                        <td class="text-muted">                                           
+                                            <span t-field="etude_formation_line_id.year_obtention" />
+                                        </td>
+                                        <td  class="text-muted">
+                                            <span t-field="etude_formation_line_id.etabli_frequent" />
+                                        </td>
+                                        <td  class="text-muted">
+                                            <span t-field="etude_formation_line_id.ville_pays" />
+                                        </td>
+                                       
+                                    </tr>
+                                    
+                                </t>
+                            </table>
+
+                            <strong class="souligne mt-4">
+                                <h3 class="text-uppercase">Enfants</h3>
+                            </strong>
+                            <table class="table col-10  table-contet mx-auto">
+                                <tr style="border: 2px solid black;">
+                                    
+                                    <td>
+                                        <strong>Nom et Prenom</strong>
+                                    </td>
+                                    <td>
+                                        <strong>Date de Naissance</strong>
+                                    </td>
+                                    <td>
+                                        <strong>Sexe</strong>
+                                    </td>
+                                    <td>
+                                        <strong>Lieu de Naissance</strong>
+                                    </td>
+                                </tr>
+                                <t t-foreach="doc.enfants_line_ids" t-as="enfants_line_id">
+                                    <tr style="border: 2px solid grey;text-align: start;">
+                                        <td class="text-muted">                                            
+                                            <span t-field="enfants_line_id.nom_prenom" />
+                                        </td>
+                                        <td class="text-muted">                                           
+                                            <span t-field="enfants_line_id.birthday" />
+                                        </td>
+                                        <td  class="text-muted">
+                                            <span t-field="enfants_line_id.sexe_enfants" />
+                                        </td>
+                                        <td  class="text-muted">
+                                            <span t-field="enfants_line_id.lieu_naissance" />
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+
+                            <div class="contact_urgen mt-4">
+                                <strong class="souligne"> 
+                                    <h1 class="text-uppercase">personnes a contacter en cas de  besoin
+                                    </h1>
+                                </strong>
+                                
+                                <div class="row">
+                                    <span>1-</span>
+                                    <div class="col-5">
+                                        <span><strong class="text-uppercase me-4" style="margin-right: 10px;">nom et prenoms :</strong></span><span t-field="doc.first_last_name_one" />
+                                    </div>
+                                    <div class="col-5"><strong>CEL:</strong></div> <span t-field="doc.name_one_phone" />
+                                </div>
+                                <div class="row">
+                                    <span>2-</span>
+                                    <div class="col-5">
+                                        <span><strong class="text-uppercase me-4" style="margin-right: 10px;">Nom et prenoms :</strong></span><span t-field="doc.first_last_name_two" />
+                                    </div>
+                                    <div class="col-5"><strong>CEL:</strong> </div> <span t-field="doc.name_two_phone" />
+                                </div>
+                            </div>
+
+                            <div class="date mt-4 me-4">
+                                <strong>DATE:</strong><span t-field="doc.date_actu" />
+                            </div>
+
+                             <div class="container my-4 ms-3">
+                                <div>
+                                    <div>
+                                        <strong>NB:</strong>
+                                    </div>
+                                    <div class="nb_text">
+                                        <ul>
+                                            <li class="mb-3">Diplome à partir de DEUG, veuillez préciser les spécialités (ex: licence de droit public ...)</li>
+                                            <li>Ne pas oublier de donner le numéro de téléphone ou l'on peut vous joindre</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                             <div class="code d-flex justify-content-end">
+                                <img t-att-src="'data:image/png;base64,%s' % to_text(doc.qr_code)" style="max-width: 200px; max-height: 200px"/>
+                            </div>
+                        </div>
+
+                        
+
+                    </t>
+                </t>
+            </t>
+        </template>
+</odoo>

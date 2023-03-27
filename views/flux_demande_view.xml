@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <data>
+    
+        <record id="flux_demande_view_form" model="ir.ui.view">
+            <field name="name">flux.demande.view.form</field>
+            <field name="model">flux.demande</field>
+            <field name="arch" type="html">
+                <form string="" id="data_odoo">
+                    <header>
+                        <button name="action_confim" type="object" states="draft" string="Soumettre" groups="flux_demande.group_flux_demande_user" class="btn-success"/>
+
+                        <button name="action_annuler" type="object" states="drh_approval" string="Annuler" groups="flux_demande.group_flux_demande_user" class="btn-danger"/>
+
+                        <button name="action_approval_drh" type="object" states="drh_approval" string="Valider" groups="flux_demande.group_flux_demande_validate" class="btn-success"/>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        
+                        <div class="oe_title pt-4">
+                            <div class="oe_title">
+                                <h1>
+                                    <field name="employee_id"/>
+                                </h1>
+                            </div>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="motif_id"/>
+                            </group>
+                            <group>
+                                <field name="request_date"/>
+                                <field name="date_start" string="Date De Debut"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Note" string="Saisir Une Note">
+                                <field name="note" string="Note"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- flux de demande tree views -->
+
+            <record id="flux_demande_views_tree" model="ir.ui.view">
+                <field name="name">flux.demande.views.tree</field>
+                <field name="model">flux.demande</field>
+                <field name="arch" type="xml">
+                    <tree>
+                        <field name="employee_id"/>
+                        <field name="type_document_id"/>
+                        <field name="request_date"/>
+                        <field name="date_start" string="Date De Depart"/>
+                        <field name="date_end" string="Date D'Echeance"/>
+                        <field name="state" string="Etat" widget="badge"
+                        decoration-warning="state == 'drh_approval'" decoration-success="state == 'done'"/>
+                    </tree>
+                </field>
+            </record>
+
+        <!-- End flux de demande tree views -->
+
+        <record id="flux_demande_view_search" model="ir.ui.view">
+            <field name="name">flux.demande.view.search</field>
+            <field name="model">flux.demande</field>
+            <field name="arch" type="xml">
+                <search string="Flux De Demande Search">
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="request_date"/>
+                    <field name="date_end"/>
+                    <field name="state"/>
+                    <field name="date_start"/>
+                    <field name="motif_id"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Demandeur" name="employee_id" context="{'group_by':'employee_id'}"/>
+                        <filter string="Date de Demande" name="request_date" context="{'group_by':'request_date'}"/>
+                        <filter string="Date de D'Echeance" name="date_end" context="{'group_by':'date_end'}"/>
+                        <filter string="State" name="state" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="type_document_view_form" model="ir.ui.view">
+            <field name="name">Type De Document</field>
+            <field name="model">type.document</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        
+                    </header>
+                    <sheet>
+                        <div class="oe_title pt-4">
+                            <div class="oe_title">
+                                <h1>
+                                    <field name="name" placeholder="Libellé Du Document"/>
+                                </h1>
+                            </div>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="motif_demande_view_form" model="ir.ui.view">
+            <field name="name">Motif De La Demande</field>
+            <field name="model">motif.demande</field>
+            <field name="arch" type="xml">
+                <form string="">
+
+                    <sheet>
+                        <div class="oe_title pt-4">
+                            <div class="oe_title">
+                                <h1>
+                                    <field name="name" placeholder="Motif de La Demande"/>
+                                </h1>
+                            </div>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="config_alert_view_form" model="ir.ui.view">
+            <field name="name">Configuration Alert</field>
+            <field name="model">config.alert</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <div class="oe_title pt-4">
+                            <div class="oe_title">
+                                <h1>
+                                    <group>
+                                
+                                        <field name="name" placeholder="Nom"/>
+                                        
+                                        <field name="actif"/>
+                                    
+                                    </group>
+                                    
+                                </h1>
+                            </div>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="config_alert_action" model="ir.actions.act_window">
+            <field name="name">Config Alert</field>
+            <field name="res_model">config.alert</field>
+            <field name="view_mode">form,tree</field>
+        </record>
+
+        <record id="grade_view_form" model="ir.ui.view">
+            <field name="name">Grade Du Fonctionnaire</field>
+            <field name="model">grade.fonctionnaire</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <div class="oe_title pt-4">
+                            <div class="oe_title">
+                                <h1>
+                                    <field name="name" placeholder="Libellé Du Grade"/>
+                                </h1>
+                            </div>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="flux_demande_action" model="ir.actions.act_window">
+            <field name="name">Flux de Demande</field>
+            <field name="res_model">flux.demande</field>
+            <field name="view_mode">form,tree,search</field>
+        </record>
+
+        <record id="type_document_action" model="ir.actions.act_window">
+            <field name="name">Type De Document</field>
+            <field name="res_model">type.document</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="motif_demande_action" model="ir.actions.act_window">
+            <field name="name">Motif De La Demande</field>
+            <field name="res_model">motif.demande</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="grade_fonctionnaire_action" model="ir.actions.act_window">
+            <field name="name">Grade Du Fonctionnaire</field>
+            <field name="res_model">grade.fonctionnaire</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        
+        <!-- End action Server web#action=416&model=hr.leave&view_type=calendar&cids=&menu_id=259-->
+        <!-- <field name="url">/web#action=hr_holidays.action_my_leave_requests</field> -->
+
+        <record id="action_redirect_to_hr_holidays" model="ir.actions.act_url">
+            <field name="name">Demande De Congé</field>
+            <field name="url">/web#action=hr_holidays.hr_leave_action_new_request</field>
+            <field name="target">self</field>
+            <field name="type">ir.actions.act_url</field>
+        </record>
+
+        <record id="action_redirect_to_hr_agent" model="ir.actions.act_url">
+            <field name="name">Agents</field>
+            <field name="url">/web#action=hr.open_view_employee_list_my</field>
+            <field name="target">self</field>
+            <field name="type">ir.actions.act_url</field>
+        </record>
+
+    </data>
+    
+
+</odoo>

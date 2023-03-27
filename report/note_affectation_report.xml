@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="report_note_affectation" model="ir.actions.report">
+        <field name="name">Note D'Affectation</field>
+        <field name="model">note.affectation</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">flux_demande.note_affectation</field>
+        <field name="report_file">flux_demande.note_affectation</field>
+        <field name="binding_model_id" ref="model_note_affectation"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+    <template id="note_affectation">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.internal_layout">
+
+                    <div class="page container">
+
+                         <style>
+
+                            .main_container{
+                                max-width: 1000px !important;
+                            }
+
+                            .content_header{
+                                display: flex;
+                                justify-content: center;
+                                margin-top: 50px !important;
+                                margin-bottom: 50px !important;
+                                margin-left: 20px !important;
+                            }
+
+                            .header_attes{
+                                border: 1px solid #000;
+                                margin-top: 10px;
+                                background-color: rgba(204, 204, 204, 0.688);
+                                font-size: 30px;
+                                box-shadow: 2px 2px 2px solid #000;
+                                width: 800px;
+                            }
+                            strong{
+                                margin-left: 10px;
+                            }
+                            
+                            .souligne{
+                                text-decoration: underline;
+                            }
+
+                        </style>
+
+                        
+                        <div class="container main_container relative">
+
+                            <div class="container mb-3 row" style="font-size: 22px; margin-top: 15px;">
+                                <div class=""><span>N*:</span> 000 <span></span> </div>
+                                <div class="" style="min-width: 320px; margin-left: 200px;">/MICEN/DRH</div>
+                                <div class="d-flex justify-content-end"><strong>Abidjan, le <span t-field="doc.request_date"/></strong></div>
+                            </div>
+                            <div class="content_header d-flex justify-content-center">
+                                <h1 class="header_attes text-uppercase text-center py-2 px-4"><span t-field="doc.name"/></h1>
+                            </div>
+                
+                            <div class="body_content_attes d-flex justify-content-center" style="font-size: 25px; margin-bottom: 35px;">
+                                <div class="content">
+                                    <p>
+                                       <span class="text-muted">Monsieur/Madame,</span>
+                                        <strong><span t-field="doc.employee_id" class="text-uppercase"/> </strong>.
+                                        <span class="text-muted">Matricule</span>
+                                        <strong><span t-field="doc.matricule" class="text-uppercase"/></strong>,
+                                        <strong><span t-field="doc.post_occuper" class="text-uppercase"/></strong>, 
+                                        <span class="text-muted">précédemment en service à la</span>
+                                        <strong><span t-field="doc.direction" class="text-uppercase"/></strong>, 
+                                        <span class="text-muted">est affecté au Cabinet du Ministère pour nécessité de service.</span>
+                        
+                                    </p>
+                                    <p class="text-muted">
+                                        La présente Note d'Affectation prend effet à compter de la date de prise de service de l'intéressé.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end mt-4">
+                                <strong>
+                                    <p class="souligne mt-4">
+                                        Alain KOMENAN
+                                    </p>
+                                    <p class="text-muted">Secrétaire Général de Préfecture</p>
+                                </strong>
+                            </div>
+                            <div class="signature mt-4">
+                                <p><strong class="souligne">Ampliations:</strong></p>
+                                <ul>
+                                    <li>Cabinet ........................... <span>01</span></li>
+                                    <li>Intéressé(e) ...................... <span>01</span></li>
+                                    <li>Chrono ............................ <span>01</span></li>
+                                </ul>
+                            </div>
+                            <div class="code d-flex justify-content-end">
+                                <img t-att-src="'data:image/png;base64,%s' % to_text(doc.qr_code)" style="max-width: 200px; max-height: 200px"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
