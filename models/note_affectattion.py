@@ -15,6 +15,17 @@ class NoteAffectation(models.Model):
     
     name = fields.Char( default="Note D'Affectation", readonly=True)
     
+    
+    @api.model
+    def generate_sequence(self):
+        prefix = 'NA-'
+        sequence = self.env['ir.sequence'].next_by_code('note.affectation.sequence') or '/'
+        numero = f'{prefix}{sequence}'
+        return numero
+
+    numero = fields.Char(string='Numéro', default=generate_sequence, readonly=True, store=True)
+    signature = fields.Char()
+
     employee_id = fields.Many2one(
         'hr.employee',
         string='Demandeur',
@@ -33,7 +44,7 @@ class NoteAffectation(models.Model):
     matricule = fields.Char(related="employee_id.identification_id", readonly=True)
     direction = fields.Char(related="employee_id.department_id.name", readonly=True)
     emploi = fields.Char(related="employee_id.emploie.name", readonly=True)
-    post_occuper = fields.Char(related="employee_id.job_id.name", readonly=True)
+    post_occuper = fields.Char(related="employee_id.fonction.name", readonly=True)
     date_prise_service = fields.Datetime(related="employee_id.create_date")
 
 
@@ -48,81 +59,107 @@ class NoteAffectation(models.Model):
     
     state = fields.Selection([
         ('draft', 'Brouillon'),
-        ('drh_approval', 'Attente de Validation DRH'),
+        ('drh_approval', 'Traitement agent RH'),
+        ('drh_sign', 'Attente de Signature DRH'),
         ('done', 'Valider'),
+        ('reject', 'Rejeter'),
     ], string='state', default='draft')
     
     
     date_start = fields.Date()
     date_end = fields.Date()
     
+    user_demande_id = fields.Many2one(
+        'res.users',
+        string='user',
+        default=lambda self: self.env.user,
+        required=True,
+        readonly=True,
+    )
      
-    employee_publier_id = fields.Many2one(
-        'res.users',
-        string='Employee Confirme',
-        )
+    employee_publier_id = fields.Many2one('res.users', string='Employee Confirme')
+    confirm_date = fields.Date( default=fields.Date.context_today)
     
-    confirm_employee_id = fields.Many2one(
-        'res.users',
-        string='Demandeur',
-        default=lambda self: self.env.user,
-        required=True,
-        readonly=True,
-    )
-    approval_manager_id = fields.Many2one(
-        'res.users',
-        string='Approbateur',
-        default=lambda self: self.env.user,
-        required=True,
-        readonly=True,
-    )
-    
-    alert_chef_cab_id = fields.Many2one(
+    validateur_rh_id = fields.Many2one(
         'config.alert',
-        default=lambda self: self.env['config.alert'].search([('actif', '=', True)], limit=1),
+        default=lambda self: self.env['config.alert'].search([('actif', '=', True), ('role', '=', 'rh')], limit=1),
         required=True,
         readonly=True,
         string='Agent RH',
-        )
+    )
+     
+    approval_agent_rh_id = fields.Many2one( 'res.users', string='Agent Rh Approbateur',)
+    approval_date = fields.Date( default=fields.Date.context_today)
     
-    confirm_date = fields.Date(
-        default=fields.Date.context_today,
+    agent_drh_id = fields.Many2one(
+        'config.alert',
+        default=lambda self: self.env['config.alert'].search([('actif', '=', True), ('role', '=','drh')], limit=1),
         required=True,
         readonly=True,
+        string='DRH',
     )
+    drh_signed = fields.Many2one('res.users', string='Agent DRH ')
+    signature_drh_date = fields.Date( default=fields.Date.context_today,readonly=True,)
+   
     
     
 #@api.multi
     def action_confim(self):
         for rec in self:
             rec.state = 'drh_approval'
-            rec.employee_publier_id = rec.confirm_employee_id.id
+            rec.employee_publier_id = rec.user_demande_id.id
             rec.confirm_date = fields.Date.today()
-            if rec.alert_chef_cab_id:
-                    message = f"Merci de valider la demande en attente de {rec.name} publier par {rec.employee_publier_id.name}."
-                    rec.message_post(body=message, partner_ids=[rec.alert_chef_cab_id.name.user_id.partner_id.id])  
+            if rec.validateur_rh_id:
+                    message = f"Merci de valider la demande d'{rec.name} Numero {rec.numero} en attente de validation."
+                    rec.message_post(body=message, partner_ids=[rec.validateur_rh_id.name.user_id.partner_id.id])
+                    
+#@api.multi
+    def action_approval_rh(self):
+        for rec in self:
+            rec.state = 'drh_sign'
+            rec.approval_agent_rh_id = rec.user_demande_id.id
+            rec.approval_date = fields.Date.today()
+            if rec.agent_drh_id:
+                    message = f"Merci de signer la demande d'{rec.name} Numero {rec.numero} en attente de signature."
+                    rec.message_post(body=message, partner_ids=[rec.agent_drh_id.name.user_id.partner_id.id]) 
   
 #@api.multi
-    def action_approval_drh(self):
+    def action_signature_drh(self):
         for rec in self:
             rec.state = 'done'
-            rec.confirm_date = fields.Date.today()
-            responsible = rec.employee_publier_id
-            responsible_email = responsible.email
-            message = f"Votre {rec.name}  a bien été Approuver le {rec.confirm_date} par {rec.approval_manager_id.name}."
+            rec.signature_drh_date = fields.Date.today()
+            responsable = rec.employee_publier_id
+            responsible_email = responsable.email
+            message = f"Votre {rec.name}  Numero {rec.numero} a bien été Valider le {rec.signature_drh_date}."
             values = {
                 'email_from': self.env.user.email,
                 'email_to': responsible_email,
-                'subject': 'Demande Accepté',
+                'subject': 'Note d"Affectation Validé',
                 'body_html': message,
             }
             # Créer l'objet mail.mail et envoyer l'e-mail
-            self.env['mail.mail'].create(values).send()  
+            self.env['mail.mail'].create(values).send() 
                
 #@api.multi
     def action_annuler(self):
         for rec in self:
             rec.state = 'draft'     
+            
+#@api.multi
+    def action_reject(self):
+        for rec in self:
+            rec.state = 'reject'
+            responsable = rec.employee_publier_id
+            responsible_email = responsable.email
+            message = f"Votre {rec.name} Numero {rec.numero} a été rejetée Contacter l'administration pour en savoir plus Merci ."
+            values = {
+                'email_from': self.env.user.email,
+                'email_to': responsible_email,
+                'subject': 'Note D"Affectation Rejeté',
+                'body_html': message,
+            }
+            # Créer l'objet mail.mail et envoyer l'e-mail
+            self.env['mail.mail'].create(values).send()   
 
     def show_note_affectation(model):
         user = model.env.user

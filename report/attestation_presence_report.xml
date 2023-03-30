@@ -37,7 +37,7 @@
                                 font-size: 30px;
                                 box-shadow: 2px 2px 2px solid #000;
                                 margin-left: 220px;
-                                width: 450px;
+                                width: 500px;
                             }
                             strong{
                                 margin-left: 10px;
@@ -51,24 +51,19 @@
                         
                         <div class="container main_container relative">
                             <div class="container mb-3 row" style="font-size: 22px; margin-top: 15px;">
-                                <div class=""><span>N*:</span> 000 <span></span>  </div>
+                                <div class=""><span>N*:</span> <span t-field="doc.numero"/> <span></span>  </div>
                                 <div class="" style="min-width: 320px; margin-left: 200px;"><span class="">/MICEN/DRH</span></div>
                                 <div class="d-flex justify-content-end"><strong>Abidjan, le <span t-field="doc.request_date"/></strong></div>
                             </div>
                             <div class="content_header d-flex justify-content-center">
                                 <h1 class="header_attes text-uppercase text-center py-2">attestation de presence</h1>
                             </div>
-                            <div class="text-center">
-                                <h1>
-                                    <strong> <p><span t-field="doc.state"/></p> </strong>
-                                </h1>
-                            </div>
 
                             <div class="body_content_attes d-flex justify-content-center mt-4" style="font-size:25px;">
                                 <div class="content">
                                     <p>
                                         <span class="text-muted">Le Directeur Des Ressources Humaines du Ministère de la communication et l'Economie Numerique, soussigné, atteste que Monsieur</span>
-                                        <strong><span t-field="doc.employee_id" class="text-uppercase"/> <span><span t-field="doc.employee_id.prenom" class="text-uppercase"/></span></strong>,
+                                        <strong><span t-field="doc.employee_id" class="text-uppercase"/></strong>,
                                         <strong><span t-field="doc.emploi" class="text-uppercase"/></strong>,
                                         <span class="text-muted">matricule</span>
                                         <strong><span t-field="doc.matricule" class="text-uppercase"/></strong>,
@@ -89,6 +84,9 @@
                                         Alain KOMENAN
                                     </p>
                                     <p class="text-muted">Secrétaire Général de Préfecture</p>
+                                    <p class="">
+                                        <img t-att-src="'data:image/png;base64,%s' % to_text(doc.signature)" style="max-width: 200px; max-height: 200px"/>
+                                    </p>
                                 </strong>
                             </div>
                             <div class="signature mt-4">

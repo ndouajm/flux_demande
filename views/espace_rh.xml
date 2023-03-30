@@ -137,6 +137,8 @@
             <field name="res_model">espace.rh</field>
             <field name="view_mode">form</field>
         </record>
+
+        
     
     </data>
     

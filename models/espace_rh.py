@@ -4,15 +4,16 @@ class EspaceRh(models.Model):
 
     _name = 'espace.rh'
     _description = 'Espace Rh'
-    _inherit = ['mon.profil']
+ 
     
     name = fields.Char( default="Espace Administrateur")
-    espace_rh_id = fields.Many2one('mon.profil', string='Espace Admin')
+    
+    # espace_rh_id = fields.Many2one('mon.profil', string='Espace Admin')
  
 
-    def lister_fiche_signaletique(self):
-        action = self.env['mon.profil'].show_mon_profil()
-        return action
+    # def lister_fiche_signaletique(self):
+    #     action = self.env['mon.profil'].show_mon_profil()
+    #     return action
     
     def lister_cert_prise_service(self):
         action = self.env['certificat.prise.service'].show_certificat_prise_service()
@@ -42,11 +43,11 @@ class EspaceRh(models.Model):
         action = self.env['note.affectation'].show_note_affectation()
         return action
     
-    nombre_fiche = fields.Integer(compute="_nombre_fiche_count", store=True,)
-    @api.depends()
-    def _nombre_fiche_count(self):
-        for record in self:
-            record.nombre_fiche = self.env['mon.profil'].search_count([])
+    # nombre_fiche = fields.Integer(compute="_nombre_fiche_count", store=True,)
+    # @api.depends()
+    # def _nombre_fiche_count(self):
+    #     for record in self:
+    #         record.nombre_fiche = self.env['mon.profil'].search_count([])
     
 
         

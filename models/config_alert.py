@@ -10,6 +10,9 @@ class ConfigAlert(models.Model):
         string='Agent Rh',
         )
     
-    
     actif = fields.Boolean( default= False)
+    
+    role = fields.Selection([('rh', 'Agent RH'),('drh','DRH')])
+    
+    agent_email = fields.Char( related='name.work_email' ,readonly=True)
 

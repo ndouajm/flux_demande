@@ -11,24 +11,32 @@
                    <header>
                         <button name="action_confim" type="object" states="draft" string="Soumettre" groups="flux_demande.group_flux_demande_user" class="btn-success"/>
 
-                        <button name="action_approval_drh" type="object" states="drh_approval" string="Valider" groups="flux_demande.group_flux_demande_validate" class="btn-success"/>
-
                         <button name="action_annuler" type="object" states="drh_approval" string="Annuler" groups="base.group_user" class="btn-danger"/>
 
-                        <field name="state" widget="statusbar"/>
+                        <button name="action_approval_rh" type="object" states="drh_approval" string="Valider" groups="flux_demande.group_flux_demande_validate" class="btn-success"/>
+
+                        <button name="action_signature_drh" type="object" states="drh_sign" string="Confirmer Signature" groups="flux_demande.group_flux_demande_validate" class="btn-info"/>
+
+                        <button name="action_reject" type="object" states="drh_sign,drh_approval" string="Rejeter" groups="flux_demande.group_flux_demande_validate" class="btn-danger"/>
+
+                        <field name="state" widget="statusbar" statusbar_visible="draft,drh_approval,done"/>
+                        
                     </header>
                     <sheet>
                         
-                        <div class="oe_title pt-4">
-                            <div class="oe_title">
+                        <div class="oe_title pt-4 row">
+                            <div class="oe_title col-md-10">
                                 <h1 class="title-class">
                                     <field name="name" placeholder="Certificat De Travail"/>
                                 </h1>
-                                
+                                <h2>
+                                    <field name="object" placeholder="objet de la demande"/>
+                                </h2>
                             </div>
-                            <h2>
-                                <field name="object" placeholder="objet de la demande"/>
-                            </h2>
+                            <div class="col-md-2 text-end">
+                                <h3><strong>N* </strong> <field name="numero"/> </h3>
+                            </div>
+                            
                         </div>
                         <group>
                             <group>
@@ -44,13 +52,16 @@
                             <page name="Note" string="Note">
                                 <field name="note" string="Note"/>
                             </page>
+                            <page name="Signature" string="Signature DRH" groups="flux_demande.group_flux_demande_validate">
+                                <field name="signature" string="signature" widget="signature"/>
+                            </page>
                         </notebook>
                     </sheet>
-                    <!-- <div class="oe_chatter">
+                    <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>
                         <field name="activity_ids"/>
                         <field name="message_ids" widget="mail_thread"/>
-                    </div> -->
+                    </div>
                     
                 </form>
             </field>
@@ -63,7 +74,7 @@
                 <field name="model">certificat.travail</field>
                 <field name="arch" type="xml">
                     <tree string="">
-                        <field name="employee_id"/>
+                        <field name="employee_id" widget="many2one_avatar_employee"/>
                         <field name="request_date"/>
                         <field name="object"/>
                         <field name="date_start" string="Date De Debut"/>

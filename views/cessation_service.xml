@@ -11,26 +11,34 @@
                     <header>
                         <button name="action_confim" type="object" states="draft" string="Soumettre" groups="flux_demande.group_flux_demande_user" class="btn-success"/>
 
-                        <button name="action_approval_drh" type="object" states="drh_approval" string="Valider" groups="flux_demande.group_flux_demande_validate" class="btn-success"/>
-
                         <button name="action_annuler" type="object" states="drh_approval" string="Annuler" groups="base.group_user" class="btn-danger"/>
 
-                        <field name="state" widget="statusbar"/>
+                        <button name="action_approval_rh" type="object" states="drh_approval" string="Valider" groups="flux_demande.group_flux_demande_validate" class="btn-success"/>
+
+                        <button name="action_signature_drh" type="object" states="drh_sign" string="Confirmer Signature" groups="flux_demande.group_flux_demande_validate" class="btn-info"/>
+
+                        <button name="action_reject" type="object" states="drh_sign,drh_approval" string="Rejeter" groups="flux_demande.group_flux_demande_validate" class="btn-danger"/>
+
+                        <field name="state" widget="statusbar" statusbar_visible="draft,drh_approval,done"/>
+                        
                     </header>
                     <sheet>
                         
-                        <div class="oe_title pt-4">
-                            <div class="oe_title">
+                        <div class="oe_title pt-4 row">
+                            <div class="oe_title col-md-10">
                                 <h1 class="title-class">
                                     <field name="name" placeholder="Cessation de Service"/>
                                 </h1>
+                            </div>
+                            <div class="col-md-2 text-end">
+                                <h3><strong>N* </strong> <field name="numero"/> </h3>
                             </div>
                         </div>
                         <group>
                             <group>
                                 <field name="employee_id"/>
                                 <field name="responsable_id"/>
-                                <field name="post_occuper" string="Poste ocuupé"/>
+                                <field name="post_occuper" string="Poste occupé"/>
                             </group>
                             <group>
                                 <field name="request_date"/>
@@ -41,6 +49,9 @@
                         <notebook>
                             <page name="Note" string="Note">
                                 <field name="note" string="Note"/>
+                            </page>
+                            <page name="Signature" string="Signature DRH" groups="flux_demande.group_flux_demande_validate">
+                                <field name="signature" string="signature" widget="signature"/>
                             </page>
                         </notebook>
                     </sheet>
@@ -60,9 +71,10 @@
                 <field name="model">cessation.service</field>
                 <field name="arch" type="xml">
                     <tree string="">
-                        <field name="employee_id"/>
+                        <field name="employee_id" string="Publier Par"/>
+                        <field name="responsable_id" widget="many2one_avatar_employee"/>
                         <field name="request_date"/>
-                        <field name="date_start" string="Date De Debut"/>
+                        <field name="date_end" string="Date De Fin de service"/>
                         <field name="state" string="Etat" widget="badge"
                         decoration-warning="state == 'drh_approval'" decoration-success="state == 'done'"/>
                     </tree>
@@ -78,11 +90,13 @@
                 <search string="">
                     <field name="name"/>
                     <field name="employee_id"/>
+                    <field name="responsable_id"/>
                     <field name="request_date"/>
                     <field name="state"/>
-                    <field name="date_start"/>
+                    <field name="date_end"/>
                     <group expand="0" string="Group By">
                         <filter string="Demandeur" name="employee_id" context="{'group_by':'employee_id'}"/>
+                        <filter string="Responsable" name="responsable_id" context="{'group_by':'responsable_id'}"/>
                         <filter string="Date de Demande" name="request_date" context="{'group_by':'request_date'}"/>
                         <filter string="Date de D'Echeance" name="date_end" context="{'group_by':'date_end'}"/>
                         <filter string="State" name="state" context="{'group_by':'state'}"/>

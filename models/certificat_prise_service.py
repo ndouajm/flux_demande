@@ -11,9 +11,18 @@ class CertificatPriseService(models.Model):
 
     _name = 'certificat.prise.service'
     _description = 'Certificat De Prise De Service'
-    _inherit = ['mail.thread']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     name = fields.Char( default="Certificat De Prise De Service", readonly=True)
+    
+    @api.model
+    def generate_sequence(self):
+        prefix = 'CPS-'
+        sequence = self.env['ir.sequence'].next_by_code('note.affectation.sequence') or '/'
+        numero = f'{prefix}{sequence}'
+        return numero
+
+    numero = fields.Char(string='Numéro', default=generate_sequence, readonly=True, store=True)
     
     employee_id = fields.Many2one(
         'hr.employee',
@@ -24,9 +33,10 @@ class CertificatPriseService(models.Model):
         copy=True,
     )
 
-    fonction = fields.Char(related="employee_id.job_title", readonly=True)
-    post_occuper = fields.Char(related="employee_id.job_id.name", readonly=True)
+    emploie = fields.Char(related="employee_id.emploie.name", readonly=True)
+    post_occuper = fields.Char(related="employee_id.fonction.name", readonly=True)
     direction = fields.Char(related="employee_id.department_id.name", readonly=True)
+    matricule = fields.Char(related="employee_id.identification_id", readonly=True)
    
     date_start = fields.Datetime(related="employee_id.create_date", readonly=True)
 
@@ -38,13 +48,7 @@ class CertificatPriseService(models.Model):
     )
 
     note = fields.Text()
-    
-    state = fields.Selection([
-        ('draft', 'Brouillon'),
-        ('drh_approval', 'Attente de Validation DRH'),
-        ('done', 'Valider'),
-    ], string='state', default='draft')
-    
+
     report_date = fields.Date(
         default=fields.Date.context_today,
         required=True,
@@ -78,39 +82,8 @@ class CertificatPriseService(models.Model):
         readonly=True,
     )
     
-#@api.multi
-    def action_confim(self):
-        for rec in self:
-            rec.state = 'drh_approval'
-            rec.employee_publier_id = rec.confirm_employee_id.id
-            rec.confirm_date = fields.Date.today()
-            if rec.alert_chef_cab_id:
-                    message = f"Merci de valider la demande en attente de {rec.name} Publier Par {rec.employee_publier_id.name}."
-                    rec.message_post(body=message, partner_ids=[rec.alert_chef_cab_id.name.user_id.partner_id.id])  
-  
-#@api.multi
-    def action_approval_drh(self):
-        for rec in self:
-            rec.state = 'done'
-            rec.confirm_date = fields.Date.today()
-            responsible = rec.employee_publier_id
-            responsible_email = responsible.email
-            message = f"Votre {rec.name}  a bien été Approuver le {rec.confirm_date} par {rec.alert_chef_cab_id.name}."
-            values = {
-                'email_from': self.env.user.email,
-                'email_to': responsible_email,
-                'subject': 'Profil Accepté',
-                'body_html': message,
-            }
-            # Créer l'objet mail.mail et envoyer l'e-mail
-            self.env['mail.mail'].create(values).send()  
-                 
-               
-#@api.multi
-    def action_annuler(self):
-        for rec in self:
-            rec.state = 'draft'     
-
+    signature = fields.Char()
+      
 # demande valider
     def liste_certificat_prise_service(model):
         user = model.env.user
@@ -140,35 +113,6 @@ class CertificatPriseService(models.Model):
         }
 
 
-    # qr_code = fields.Binary("QR Code", attachment=True)
-
-    # def generate_hr_qr(self):
-    #     if self.name:
-    #         if self.name:
-    #             qr = qrcode.QRCode(
-    #                 version=1,
-    #                 error_correction=qrcode.constants.ERROR_CORRECT_L,
-    #                 box_size=10,
-    #                 border=4,
-    #             )
-
-    #             qr.add_data(self.name)
-    #             qr.add_data('\n')
-    #             qr.add_data("Nom : " + str(self.employee_id))
-    #             qr.add_data('\n')
-    #             qr.add_data("Fonction : " + str(self.post_occuper))
-    #             qr.add_data('\n')
-    #             qr.make(fit=True)
-    #             img = qr.make_image()
-    #             tmp = BytesIO()
-    #             img.save(tmp, format="PNG")
-    #             qr_img = base64.b64encode(tmp.getvalue())
-    #             self.qr_code = qr_img
-    #         else:
-    #             raise UserError(_('Verifier si le Nom et le Matricule est saisir.'))
-            
-
-
     qr_code = fields.Binary("QR Code", attachment=True)
 
     @api.model
@@ -191,7 +135,7 @@ class CertificatPriseService(models.Model):
                 border=4,
             )
 
-            qr.add_data(f"Document : {self.name}\nNom de l'Agent : {self.employee_id}\nPoste occupé : {self.post_occuper}")
+            qr.add_data(f"Document : {self.name}\nNom de l'Agent : {self.employee_id}\nPoste occupé : {self.post_occuper}\nMatricule : {self.matricule}")
             qr.make(fit=True)
             img = qr.make_image(fill_color="#ffffff", back_color="#ff9900")
             logo_size = 100 # La taille du logo

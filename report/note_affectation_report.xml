@@ -55,7 +55,7 @@
                         <div class="container main_container relative">
 
                             <div class="container mb-3 row" style="font-size: 22px; margin-top: 15px;">
-                                <div class=""><span>N*:</span> 000 <span></span> </div>
+                                <div class=""><span>N*:</span> <span t-field="doc.numero"/> <span></span> </div>
                                 <div class="" style="min-width: 320px; margin-left: 200px;">/MICEN/DRH</div>
                                 <div class="d-flex justify-content-end"><strong>Abidjan, le <span t-field="doc.request_date"/></strong></div>
                             </div>
@@ -87,6 +87,9 @@
                                         Alain KOMENAN
                                     </p>
                                     <p class="text-muted">Secrétaire Général de Préfecture</p>
+                                    <p class="">
+                                        <img t-att-src="'data:image/png;base64,%s' % to_text(doc.signature)" style="max-width: 200px; max-height: 200px"/>
+                                    </p>
                                 </strong>
                             </div>
                             <div class="signature mt-4">

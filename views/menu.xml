@@ -47,12 +47,12 @@
                 groups="group_flux_demande_admin"
                 sequence="10"/>
 
-            <menuitem
+            <!-- <menuitem
                 id="motif_demande_action_menu"
                 name="Motif De La Demande"
                 action="motif_demande_action"
                 parent="config_type_doc_menu"
-                sequence="2"/>
+                sequence="2"/> -->
 
             <menuitem
                 id="grade_agent_action_menu"

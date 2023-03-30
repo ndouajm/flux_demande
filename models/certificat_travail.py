@@ -12,9 +12,18 @@ class CertificatTravail(models.Model):
     _name = 'certificat.travail'
     _description = 'Certificat De Travail'
     
-    _inherit = ['mail.thread']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     name = fields.Char( default="Certificat De Travail", readonly=True)
+    
+    @api.model
+    def generate_sequence(self):
+        prefix = 'CT-'
+        sequence = self.env['ir.sequence'].next_by_code('note.affectation.sequence') or '/'
+        numero = f'{prefix}{sequence}'
+        return numero
+
+    numero = fields.Char(string='Numéro', default=generate_sequence, readonly=True, store=True)
     
     employee_id = fields.Many2one(
         'hr.employee',
@@ -25,11 +34,12 @@ class CertificatTravail(models.Model):
     )
     object = fields.Char( string="Objet de la Demande")
     
-    direction = fields.Char(related="employee_id.department_id.name", readonly=True)
-    post_occuper = fields.Char(related="employee_id.job_id.name", readonly=True)
-
+    signature = fields.Char()
     
-    date_start = fields.Date()
+    direction = fields.Char(related="employee_id.department_id.name", readonly=True)
+    post_occuper = fields.Char(related="employee_id.fonction.name", readonly=True)
+    date_start = fields.Date(related="employee_id.date_service", readonly=False)
+    
     date_end = fields.Date()
     
     request_date = fields.Date(
@@ -42,61 +52,74 @@ class CertificatTravail(models.Model):
     
     state = fields.Selection([
         ('draft', 'Brouillon'),
-        ('drh_approval', 'Attente de Validation DRH'),
+        ('drh_approval', 'Traitement agent RH'),
+        ('drh_sign', 'Attente de Signature DRH'),
         ('done', 'Valider'),
+        ('reject', 'Rejeter'),
     ], string='state', default='draft')
     
-    employee_publier_id = fields.Many2one(
+    user_demande_id = fields.Many2one(
         'res.users',
-        string='Employee Confirme',
-        )
-    
-    confirm_employee_id = fields.Many2one(
-        'res.users',
-        string='Demandeur',
+        string='user',
         default=lambda self: self.env.user,
         required=True,
         readonly=True,
     )
+    employee_publier_id = fields.Many2one('res.users', string='Employee Confirme')
+    confirm_date = fields.Date( default=fields.Date.context_today)
     
-    alert_chef_cab_id = fields.Many2one(
+    validateur_rh_id = fields.Many2one(
         'config.alert',
-        default=lambda self: self.env['config.alert'].search([('actif', '=', True)], limit=1),
+        default=lambda self: self.env['config.alert'].search([('actif', '=', True), ('role', '=', 'rh')], limit=1),
         required=True,
         readonly=True,
         string='Agent RH',
-        )
+    )
+    approval_agent_rh_id = fields.Many2one( 'res.users', string='Agent Rh Approbateur',)
+    approval_date = fields.Date( default=fields.Date.context_today)
     
-    confirm_date = fields.Date(
-        default=fields.Date.context_today,
+    agent_drh_id = fields.Many2one(
+        'config.alert',
+        default=lambda self: self.env['config.alert'].search([('actif', '=', True), ('role', '=','drh')], limit=1),
         required=True,
         readonly=True,
+        string='DRH',
     )
-    
-    
+    drh_signed = fields.Many2one('res.users', string='Agent DRH ')
+    signature_drh_date = fields.Date( default=fields.Date.context_today,readonly=True,)
     
  #@api.multi
     def action_confim(self):
         for rec in self:
             rec.state = 'drh_approval'
-            rec.employee_publier_id = rec.confirm_employee_id.id
+            rec.employee_publier_id = rec.user_demande_id.id
             rec.confirm_date = fields.Date.today()
-            if rec.alert_chef_cab_id:
-                    message = f"Merci de valider la demande en attente de {rec.name} publier par {rec.employee_publier_id.name}."
-                    rec.message_post(body=message, partner_ids=[rec.alert_chef_cab_id.name.user_id.partner_id.id])  
+            if rec.validateur_rh_id:
+                    message = f"Merci de valider la demande d'{rec.name} Numero {rec.numero} en attente de validation."
+                    rec.message_post(body=message, partner_ids=[rec.validateur_rh_id.name.user_id.partner_id.id])
+                    
+#@api.multi
+    def action_approval_rh(self):
+        for rec in self:
+            rec.state = 'drh_sign'
+            rec.approval_agent_rh_id = rec.user_demande_id.id
+            rec.approval_date = fields.Date.today()
+            if rec.agent_drh_id:
+                    message = f"Merci de signer la demande d'{rec.name} Numero {rec.numero} en attente de signature."
+                    rec.message_post(body=message, partner_ids=[rec.agent_drh_id.name.user_id.partner_id.id])
   
 #@api.multi
-    def action_approval_drh(self):
+    def action_signature_drh(self):
         for rec in self:
             rec.state = 'done'
-            rec.confirm_date = fields.Date.today()
-            responsible = rec.employee_publier_id
-            responsible_email = responsible.email
-            message = f"Votre {rec.name}  a bien été Approuver le {rec.confirm_date} par {rec.alert_chef_cab_id.name}."
+            rec.signature_drh_date = fields.Date.today()
+            responsable = rec.employee_publier_id
+            responsible_email = responsable.email
+            message = f"Votre {rec.name}  Numero {rec.numero} a bien été Valider le {rec.signature_drh_date}."
             values = {
                 'email_from': self.env.user.email,
                 'email_to': responsible_email,
-                'subject': 'Profil Accepté',
+                'subject': 'Certificat de travail Accepté',
                 'body_html': message,
             }
             # Créer l'objet mail.mail et envoyer l'e-mail
@@ -106,6 +129,22 @@ class CertificatTravail(models.Model):
     def action_annuler(self):
         for rec in self:
             rec.state = 'draft'     
+            
+#@api.multi
+    def action_reject(self):
+        for rec in self:
+            rec.state = 'reject'
+            responsable = rec.employee_publier_id
+            responsible_email = responsable.email
+            message = f"Votre {rec.name} Numero {rec.numero} a été rejetée Contacter l'administration pour en savoir plus Merci ."
+            values = {
+                'email_from': self.env.user.email,
+                'email_to': responsible_email,
+                'subject': 'Certificat de travail Rejeté',
+                'body_html': message,
+            }
+            # Créer l'objet mail.mail et envoyer l'e-mail
+            self.env['mail.mail'].create(values).send()      
 
 # demande valider  show_certificat_travail
     def liste_certificat_travail(model):
