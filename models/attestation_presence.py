@@ -198,7 +198,8 @@ class AttestationPresence(models.Model):
                 border=4,
             )
 
-            qr.add_data(f"Document : {self.name}\nNom de l'Agent : {self.employee_id}\nMatricule : {self.matricule}")
+            qr.add_data(f"Document : {self.name}\nNom de l'Agent : {self.employee_id.name}\nMatricule : {self.matricule}")
+            
             qr.make(fit=True)
             img = qr.make_image(fill_color="#ffffff", back_color="#ff9900")
             logo_size = 100 # La taille du logo

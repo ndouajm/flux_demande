@@ -54,12 +54,14 @@
                         <div class="container main_container relative">
 
                             <div class="container mb-3 row" style="font-size: 22px; margin-top: 15px;">
-                                <div class=""><span>N*:</span> <span t-field="doc.numero"/> <span></span> <span class="ms-4">/MENUTI/DRH</span> </div>
-                                <div class="d-flex justify-content-end"><strong>Abidjan, le <span t-field="doc.request_date"/></strong></div>
+                                <div class=""><span>N*:</span> <span t-field="doc.numero"/> <span></span>  </div>
+                                <div class="" style="min-width: 320px; margin-left: 200px;"><span class="">/MICEN/DRH</span></div>
+                                <div class="d-flex justify-content-end"><strong>Abidjan, le <span>..../.../.../</span></strong></div>
                             </div>
-                            <div class="content_header d-flex justify-content-center">
-                                <h1 class="header_attes text-uppercase text-center py-2 px-2">CERTIFICAT DE PRISE DE SERVICE</h1>
-                            </div>
+                            
+                            <center class="content_header d-flex justify-content-center">
+                                <h1 class="header_attes text-uppercase text-center py-2 px-2"><span t-field="doc.name"/></h1>
+                            </center>
 
                             <div class="body_content_attes d-flex justify-content-center" style="font-size: 25px; margin-bottom: 35px;">
                                 <div class="content">
